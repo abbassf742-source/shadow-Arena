@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shadow Arena: AB Legacy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #080808;
+      --card: #121212;
+      --red: #e63946;
+      --red-glow: #ff2a2a;
+      --gray: #b8b8b8;
+      --win: #0078d4;
+      --android: #3ddc84;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      font-family:'Rajdhani',sans-serif;
+      background:var(--bg);
+      color:#f2f2f2;
+      overflow-x:hidden;
+    }
+
+    /* NAVBAR */
+    nav {
+      background:linear-gradient(180deg,var(--red),#c41e2a);
+      padding:0 20px;
+      height:60px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      position:sticky;
+      top:0;
+      z-index:1000;
+      box-shadow:0 4px 30px rgba(230,57,70,0.45);
+    }
+    .brand {
+      font-family:'Orbitron',sans-serif;
+      font-weight:900;
+      font-size:1rem;
+      color:#fff;
+      letter-spacing:1px;
+    }
+    .links { display:flex; gap:4px; }
+    .links a {
+      font-family:'Orbitron',sans-serif;
+      font-weight:700;
+      font-size:0.7rem;
+      color:#fff;
+      text-decoration:none;
+      padding:8px 12px;
+      border-radius:8px;
+      text-transform:uppercase;
+      letter-spacing:1px;
+      transition:all 0.3s;
+    }
+    .links a:hover, .links a.active {
+      background:rgba(0,0,0,0.3);
+    }
+
+    /* HERO */
+    .hero {
+      position:relative;
+      padding:60px 16px 50px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      text-align:center;
+      background:
+        radial-gradient(ellipse at 50% 0%,rgba(230,57,70,0.12) 0%,transparent 55%),
+        linear-gradient(180deg,#0a0a0a 0%,var(--bg) 100%);
+    }
+    .hero::after {
+      content:'';
+      position:absolute;
+      bottom:0; left:0; right:0;
+      height:80px;
+      background:linear-gradient(180deg,transparent,var(--bg));
+      pointer-events:none;
+    }
+    .logo-wrap {
+      position:relative;
+      margin-bottom:30px;
+      z-index:2;
+    }
+    .logo-wrap img {
+      width:220px; height:220px;
+      border-radius:20px;
+      object-fit:cover;
+      border:3px solid var(--red);
+      box-shadow:0 0 50px rgba(230,57,70,0.35),0 20px 60px rgba(0,0,0,0.6);
+      animation:logoPulse 3.5s ease-in-out infinite;
+      max-width:90vw;
+    }
+    @keyframes logoPulse {
+      0%,100%{box-shadow:0 0 50px rgba(230,57,70,0.35),0 20px 60px rgba(0,0,0,0.6);}
+      50%{box-shadow:0 0 70px rgba(230,57,70,0.55),0 20px 60px rgba(0,0,0,0.6);}
+    }
+
+    /* PLAY BAR */
+    .play-bar {
+      width:100%; max-width:920px;
+      background:linear-gradient(145deg,#2a2a2a,#1e1e1e);
+      border-radius:16px;
+      padding:24px 20px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:20px;
+      border:1px solid rgba(255,255,255,0.06);
+      box-shadow:0 12px 40px rgba(0,0,0,0.6);
+      position:relative;
+      overflow:hidden;
+      z-index:2;
+    }
+    .play-left {
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:16px;
+      text-align:center;
+    }
+    .play-btn {
+      width:72px; height:72px;
+      border-radius:50%;
+      background:linear-gradient(145deg,var(--red),#c41e2a);
+      border:none;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      box-shadow:0 0 35px rgba(230,57,70,0.5);
+      position:relative;
+    }
+    .play-btn svg { width:28px; height:28px; fill:#fff; margin-left:3px; }
+    .play-title {
+      font-family:'Orbitron',sans-serif;
+      font-weight:900;
+      font-size:1.15rem;
+      color:#fff;
+      letter-spacing:1px;
+    }
+    .play-sub {
+      font-size:0.8rem;
+      color:var(--gray);
+      margin-top:4px;
+      letter-spacing:2px;
+      text-transform:uppercase;
+    }
+    .coming-soon {
+      background:linear-gradient(145deg,#0a0a0a,#000);
+      color:var(--red-glow);
+      font-family:'Orbitron',sans-serif;
+      font-weight:900;
+      font-size:0.8rem;
+      padding:12px 20px;
+      border-radius:10px;
+      border:1.5px solid #8b0000;
+      text-transform:uppercase;
+      letter-spacing:3px;
+      animation:pulse 2.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100%{box-shadow:0 0 25px rgba(139,0,0,0.35);}
+      50%{box-shadow:0 0 40px rgba(230,57,70,0.5);}
+    }
+
+    /* SECTIONS */
+    section { padding:60px 16px; max-width:1140px; margin:0 auto; }
+    .sec-title {
+      font-family:'Orbitron',sans-serif;
+      font-weight:900;
+      font-size:1.5rem;
+      color:#fff;
+      text-align:center;
+      margin-bottom:12px;
+      text-transform:uppercase;
+      letter-spacing:2px;
+      position:relative;
+      display:inline-block;
+      left:50%;
+      transform:translateX(-50%);
+    }
+    .sec-title::after {
+      content:'';
+      display:block;
+      width:60px; height:3px;
+      background:var(--red);
+      margin:12px auto 0;
+      border-radius:2px;
+      box-shadow:0 0 15px rgba(230,57,70,0.6);
+    }
+    .sec-sub {
+      text-align:center;
+      color:var(--gray);
+      font-size:0.95rem;
+      margin-bottom:40px;
+      letter-spacing:1px;
+    }
+
+    /* CARDS */
+    .cards {
+      display:grid;
+      grid-template-columns:1fr;
+      gap:16px;
+    }
+    .card {
+      background:linear-gradient(145deg,#161616,#0f0f0f);
+      border-radius:16px;
+      padding:28px 22px;
+      border:1px solid rgba(255,255,255,0.04);
+      transition:all 0.45s ease;
+    }
+    .card:hover {
+      transform:translateY(-6px);
+      box-shadow:0 12px 40px rgba(0,0,0,0.5);
+      border-color:rgba(230,57,70,0.15);
+    }
+    .card-icon {
+      width:50px; height:50px;
+      border-radius:12px;
+      background:rgba(230,57,70,0.1);
+      border:1px solid rgba(230,57,70,0.2);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin-bottom:16px;
+      font-size:1.4rem;
+    }
+    .card h3 {
+      font-family:'Orbitron',sans-serif;
+      font-weight:700;
+      font-size:1rem;
+      color:#fff;
+      margin-bottom:10px;
+      letter-spacing:1px;
+    }
+    .card p {
+      color:var(--gray);
+      font-size:0.9rem;
+      line-height:1.7;
+    }
+
+    /* DOWNLOAD */
+    .dl-section {
+      background:
+        radial-gradient(ellipse at 30% 50%,rgba(0,120,212,0.04) 0%,transparent 50%),
+        radial-gradient(ellipse at 70% 50%,rgba(61,220,132,0.03) 0%,transparent 50%),
+        var(--bg);
+    }
+    .dl-grid {
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:20px;
+    }
+    .dl-card {
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:14px;
+      padding:28px 24px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,0.05);
+      background:linear-gradient(145deg,#141414,#0c0c0c);
+      width:100%; max-width:340px;
+      transition:all 0.4s ease;
+      position:relative;
+      overflow:hidden;
+    }
+    .dl-card::before {
+      content:'';
+      position:absolute;
+      top:0; left:0; right:0;
+      height:3px;
+    }
+    .dl-card.win::before { background:linear-gradient(90deg,var(--win),#1a9fff); }
+    .dl-card.and::before { background:linear-gradient(90deg,var(--android),#66ff99); }
+    .dl-card:hover { transform:translateY(-6px); box-shadow:0 16px 40px rgba(0,0,0,0.5); }
+    .dl-icon { width:56px; height:56px; }
+    .dl-icon svg { width:100%; height:100%; }
+    .dl-name {
+      font-family:'Orbitron',sans-serif;
+      font-weight:900;
+      font-size:1.1rem;
+      color:#fff;
+      letter-spacing:2px;
+    }
+    .dl-btn {
+      display:flex; align-items:center; justify-content:center; gap:10px;
+      padding:14px 32px;
+      border-radius:10px;
+      border:none;
+      font-family:'Orbitron',sans-serif;
+      font-weight:700;
+      font-size:0.85rem;
+      color:#fff;
+      text-transform:uppercase;
+      letter-spacing:2px;
+      cursor:pointer;
+      width:100%;
+      transition:all 0.35s ease;
+    }
+    .dl-btn.win-btn {
+      background:linear-gradient(145deg,var(--win),#005a9e);
+      box-shadow:0 6px 25px rgba(0,120,212,0.35);
+    }
+    .dl-btn.and-btn {
+      background:linear-gradient(145deg,var(--android),#2cb86a);
+      box-shadow:0 6px 25px rgba(61,220,132,0.35);
+    }
+    .dl-btn:hover { transform:translateY(-3px); }
+    .dl-soon {
+      font-family:'Orbitron',sans-serif;
+      font-weight:900;
+      font-size:0.75rem;
+      color:var(--red-glow);
+      text-transform:uppercase;
+      letter-spacing:3px;
+      animation:textGlow 2s ease-in-out infinite;
+    }
+    @keyframes textGlow {
+      0%,100%{text-shadow:0 0 10px rgba(255,42,42,0.3);}
+      50%{text-shadow:0 0 20px rgba(255,42,42,0.6);}
+    }
+
+    /* DEVELOPER */
+    .dev-card {
+      background:linear-gradient(145deg,#141414,#0c0c0c);
+      border-radius:20px;
+      padding:36px 24px;
+      max-width:400px;
+      margin:0 auto;
+      text-align:center;
+      border:1px solid rgba(255,255,255,0.04);
+      position:relative;
+      overflow:hidden;
+    }
+    .dev-card::after {
+      content:'';
+      position:absolute;
+      bottom:0; left:0;
+      width:100%; height:4px;
+      background:linear-gradient(90deg,var(--red),var(--red-glow));
+    }
+    .dev-card img {
+      width:100px; height:100px;
+      border-radius:50%;
+      object-fit:cover;
+      border:3px solid var(--red);
+      margin:0 auto 20px;
+      display:block;
+      box-shadow:0 0 40px rgba(230,57,70,0.2);
+    }
+    .dev-name {
+      font-family:'Orbitron',sans-serif;
+      font-weight:900;
+      font-size:1.3rem;
+      color:#fff;
+      letter-spacing:2px;
+    }
+    .dev-role {
+      color:var(--red);
+      font-weight:700;
+      font-size:0.95rem;
+      letter-spacing:3px;
+      text-transform:uppercase;
+    }
+    .dev-line {
+      width:50px; height:2px;
+      background:linear-gradient(90deg,transparent,#555,transparent);
+      margin:20px auto;
+    }
+    .dev-desc {
+      color:var(--gray);
+      font-size:0.9rem;
+      line-height:1.8;
+    }
+
+    /* FOOTER */
+    footer {
+      background:#040404;
+      padding:32px 16px;
+      text-align:center;
+      border-top:1px solid rgba(255,255,255,0.02);
+    }
+    footer span { color:var(--gray); font-size:0.85rem; letter-spacing:1px; }
+    footer strong {
+      font-family:'Orbitron',sans-serif;
+      font-weight:700;
+      color:var(--red);
+    }
+
+    /* SCROLL REVEAL */
+    .reveal {
+      opacity:0;
+      transform:translateY(30px);
+      transition:all 0.8s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+    .d1 { transition-delay:0.1s; }
+    .d2 { transition-delay:0.2s; }
+    .d3 { transition-delay:0.3s; }
+
+    /* DESKTOP */
+    @media(min-width:769px){
+      nav { padding:0 32px; height:68px; }
+      .brand { font-size:1.25rem; }
+      .links a { font-size:0.85rem; padding:10px 20px; }
+      .hero { padding:100px 24px 80px; }
+      .logo-wrap img { width:300px; height:300px; }
+      .play-bar { flex-direction:row; justify-content:space-between; padding:36px 48px; }
+      .play-left { flex-direction:row; text-align:left; gap:28px; }
+      .play-btn { width:84px; height:84px; }
+      .play-btn svg { width:34px; height:34px; }
+      .play-title { font-size:1.7rem; }
+      .coming-soon { font-size:0.9rem; padding:14px 24px; }
+      section { padding:100px 24px; }
+      .sec-title { font-size:2.2rem; letter-spacing:4px; }
+      .sec-sub { font-size:1.05rem; margin-bottom:56px; }
+      .cards { grid-template-columns:repeat(2,1fr); gap:24px; }
+      .card { padding:36px 28px; }
+      .dl-grid { flex-direction:row; gap:40px; }
+      .dl-card { width:auto; max-width:320px; padding:36px 48px; }
+      .dl-icon { width:64px; height:64px; }
+      .dl-btn { width:auto; }
+      .dev-card { padding:56px 48px; max-width:560px; }
+      .dev-card img { width:120px; height:120px; }
+    }
+    @media(min-width:1024px){
+      .cards { grid-template-columns:repeat(4,1fr); }
+    }
+    /* LIKE BUTTON */
+    .like-section { display:flex; flex-direction:column; align-items:center; }
+    .like-btn {
+      display:flex; align-items:center; gap:10px;
+      padding:12px 28px;
+      border-radius:50px;
+      border:2px solid rgba(230,57,70,0.4);
+      background:linear-gradient(145deg,#1a1a1a,#0f0f0f);
+      color:#fff;
+      font-family:'Orbitron',sans-serif;
+      font-weight:700;
+      font-size:0.9rem;
+      cursor:pointer;
+      transition:all 0.4s ease;
+      letter-spacing:2px;
+      text-transform:uppercase;
+    }
+    .like-btn:hover {
+      border-color:rgba(230,57,70,0.8);
+      box-shadow:0 0 25px rgba(230,57,70,0.25);
+      transform:scale(1.05);
+    }
+    .like-btn.liked {
+      background:linear-gradient(145deg,#2d5a3d,#1a3d2a);
+      border-color:#3ddc84;
+      color:#3ddc84;
+      box-shadow:0 0 30px rgba(61,220,132,0.4);
+      animation:likePulse 0.5s ease;
+    }
+    .like-btn.liked:hover {
+      box-shadow:0 0 40px rgba(61,220,132,0.5);
+    }
+    .heart-icon { width:20px; height:20px; transition:all 0.3s ease; }
+    .like-btn.liked .heart-icon { fill:#3ddc84; stroke:#3ddc84; transform:scale(1.2); }
+    .like-count {
+      background:rgba(255,255,255,0.1);
+      padding:2px 10px;
+      border-radius:12px;
+      font-size:0.75rem;
+      min-width:24px;
+      text-align:center;
+    }
+    .like-btn.liked .like-count { background:rgba(61,220,132,0.2); }
+    @keyframes likePulse {
+      0% { transform:scale(1); }
+      50% { transform:scale(1.15); }
+      100% { transform:scale(1); }
+    }
+    .like-names { transition:all 0.4s ease; }
+    .like-names.show { display:block !important; animation:fadeIn 0.5s ease; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(-5px); } to { opacity:1; transform:translateY(0); } }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="brand">Shadow Arena: AB Legacy</div>
+  <div class="links">
+    <a href="#home" class="active">Home</a>
+    <a href="#download">Download</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home" style="max-width:none; padding-bottom:0;">
+  <div class="logo-wrap">
+    <img src="game-logo.jpg" alt="Shadow Arena: AB Legacy Logo">
+  </div>
+  <div class="play-bar">
+    <div class="play-left">
+      <button class="play-btn" aria-label="Play">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+      <div>
+        <div class="play-title">Shadow Arena: AB Legacy</div>
+        <div class="play-sub">2D Fighting Game</div>
+      </div>
+    </div>
+    <div class="coming-soon">Coming Soon</div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="reveal">
+  <div class="sec-title">About The Game</div>
+  <div class="sec-sub">Enter the arena. Master the shadows. Claim your legacy.</div>
+  <div class="cards">
+    <div class="card d1">
+      <div class="card-icon">&#x2694;&#xFE0F;</div>
+      <h3>Intense Battles</h3>
+      <p>Engage in fast-paced 2D combat where every move counts. Chain devastating combos and outsmart your opponents.</p>
+    </div>
+    <div class="card d2">
+      <div class="card-icon">&#x1F5E1;&#xFE0F;</div>
+      <h3>Legendary Weapons</h3>
+      <p>Wield a diverse arsenal of weapons, each with unique movesets and playstyles. Find your perfect weapon.</p>
+    </div>
+    <div class="card d3">
+      <div class="card-icon">&#x1F9D9;</div>
+      <h3>Unique Characters</h3>
+      <p>Choose from a roster of powerful fighters, each with their own backstory and fighting style.</p>
+    </div>
+    <div class="card d1">
+      <div class="card-icon">&#x2728;</div>
+      <h3>Special Abilities</h3>
+      <p>Unleash devastating special abilities and ultimate moves to turn the tide of battle.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DOWNLOAD -->
+<section class="dl-section reveal" id="download">
+  <div class="sec-title">Download Game</div>
+  <div class="sec-sub">Choose your platform and prepare for battle</div>
+  <div class="dl-grid">
+
+    <!-- Windows -->
+    <div class="dl-card win d1">
+      <div class="dl-icon">
+        <svg viewBox="0 0 88 88" fill="none"><path d="M0 12.5L36.5 8.2V41.7H0V12.5Z" fill="#0078D4"/><path d="M40 7.7L87.3 0V41.3H40V7.7Z" fill="#0078D4"/><path d="M0 45.3H36.5V79.5L0 75.3V45.3Z" fill="#0078D4"/><path d="M40 45.3H87.3V88L40 80.3V45.3Z" fill="#0078D4"/></svg>
+      </div>
+      <div class="dl-name">Windows</div>
+      <button class="dl-btn win-btn">
+        <svg width="16" height="16" viewBox="0 0 88 88" fill="currentColor"><path d="M0 12.5L36.5 8.2V41.7H0V12.5Z"/><path d="M40 7.7L87.3 0V41.3H40V7.7Z"/><path d="M0 45.3H36.5V79.5L0 75.3V45.3Z"/><path d="M40 45.3H87.3V88L40 80.3V45.3Z"/></svg>
+        Download
+      </button>
+      <div class="dl-soon">Coming Soon</div>
+    </div>
+
+    <!-- Android -->
+    <div class="dl-card and d2">
+      <div class="dl-icon">
+        <svg viewBox="0 0 105 125" fill="none"><path d="M78.5 0L65.8 21.8H39.2L26.5 0H78.5Z" fill="#3DDC84"/><path d="M52.5 95C41.2 95 32 85.8 32 74.5V35.5C32 24.2 41.2 15 52.5 15C63.8 15 73 24.2 73 35.5V74.5C73 85.8 63.8 95 52.5 95Z" fill="#3DDC84"/><path d="M20 35C14.5 35 10 39.5 10 45V70C10 75.5 14.5 80 20 80C25.5 80 30 75.5 30 70V45C30 39.5 25.5 35 20 35Z" fill="#3DDC84"/><path d="M85 35C79.5 35 75 39.5 75 45V70C75 75.5 79.5 80 85 80C90.5 80 95 75.5 95 70V45C95 39.5 90.5 35 85 35Z" fill="#3DDC84"/><path d="M32 95H73V105C73 110.5 68.5 115 63 115H42C36.5 115 32 110.5 32 105V95Z" fill="#3DDC84"/><path d="M15 25C12.2 25 10 27.2 10 30V55C10 57.8 12.2 60 15 60C17.8 60 20 57.8 20 55V30C20 27.2 17.8 25 15 25Z" fill="#3DDC84"/><path d="M90 25C87.2 25 85 27.2 85 30V55C85 57.8 87.2 60 90 60C92.8 60 95 57.8 95 55V30C95 27.2 92.8 25 90 25Z" fill="#3DDC84"/></svg>
+      </div>
+      <div class="dl-name">Android</div>
+      <button class="dl-btn and-btn">
+        <svg width="16" height="16" viewBox="0 0 105 125" fill="currentColor"><path d="M78.5 0L65.8 21.8H39.2L26.5 0H78.5Z"/><path d="M52.5 95C41.2 95 32 85.8 32 74.5V35.5C32 24.2 41.2 15 52.5 15C63.8 15 73 24.2 73 35.5V74.5C73 85.8 63.8 95 52.5 95Z"/><path d="M20 35C14.5 35 10 39.5 10 45V70C10 75.5 14.5 80 20 80C25.5 80 30 75.5 30 70V45C30 39.5 25.5 35 20 35Z"/><path d="M85 35C79.5 35 75 39.5 75 45V70C75 75.5 79.5 80 85 80C90.5 80 95 75.5 95 70V45C95 39.5 90.5 35 85 35Z"/><path d="M32 95H73V105C73 110.5 68.5 115 63 115H42C36.5 115 32 110.5 32 105V95Z"/><path d="M15 25C12.2 25 10 27.2 10 30V55C10 57.8 12.2 60 15 60C17.8 60 20 57.8 20 55V30C20 27.2 17.8 25 15 25Z"/><path d="M90 25C87.2 25 85 27.2 85 30V55C85 57.8 87.2 60 90 60C92.8 60 95 57.8 95 55V30C95 27.2 92.8 25 90 25Z"/></svg>
+        Download
+      </button>
+      <div class="dl-soon">Coming Soon</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- DEVELOPER -->
+<section class="reveal">
+  <div class="sec-title">Developer</div>
+  <div class="sec-sub">The mind behind the shadows</div>
+  <div class="dev-card">
+    <img src="dev-photo.jpg" alt="Abbas Fakih">
+    <div class="dev-name">Abbas Fakih</div>
+    <div class="dev-role">Game Programmer</div>
+    <div class="like-section" style="margin-top: 20px;">
+      <button class="like-btn" id="likeBtn" onclick="toggleLike()">
+        <svg class="heart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+        </svg>
+        <span class="like-text">Like</span>
+        <span class="like-count" id="likeCount">0</span>
+      </button>
+
+    </div>
+
+    <div class="dev-line"></div>
+    <div class="dev-desc">
+      Created &amp; Developed by Abbas Fakih &mdash; passionate about crafting immersive 2D fighting experiences with deep combat mechanics and stunning visuals.
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>&copy; 2026 <strong>Shadow Arena: AB Legacy</strong>. All rights reserved.</span>
+</footer>
+
+<script>
+  // Scroll reveal
+  document.querySelectorAll('.reveal').forEach(el => {
+    new IntersectionObserver((entries) => {
+      entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+    },{threshold:0.1}).observe(el);
+  });
+
+  // Smooth scroll + active nav
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click',function(e){
+      e.preventDefault();
+      document.querySelector(this.getAttribute('href')).scrollIntoView({behavior:'smooth'});
+    });
+  });
+  window.addEventListener('scroll',()=>{
+    let cur='';
+    document.querySelectorAll('section[id]').forEach(s=>{
+      if(scrollY>=s.offsetTop-100) cur=s.id;
+    });
+    document.querySelectorAll('.links a').forEach(l=>{
+      l.classList.toggle('active',l.getAttribute('href')==='#'+cur);
+    });
+  });
+
+  // Like button functionality
+  let liked = false;
+  let likeCount = 0;
+  function toggleLike() {
+    const btn = document.getElementById('likeBtn');
+    const count = document.getElementById('likeCount');
+    if (!liked) {
+      liked = true;
+      likeCount++;
+      btn.classList.add('liked');
+      btn.querySelector('.like-text').textContent = 'Liked';
+      count.textContent = likeCount;
+    } else {
+      liked = false;
+      likeCount--;
+      btn.classList.remove('liked');
+      btn.querySelector('.like-text').textContent = 'Like';
+      count.textContent = likeCount;
+    }
+  }
+</script>
+
+</body>
+</html>
