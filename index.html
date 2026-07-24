@@ -405,36 +405,8 @@
     .d2 { transition-delay:0.2s; }
     .d3 { transition-delay:0.3s; }
 
-    /* DESKTOP */
-    @media(min-width:769px){
-      nav { padding:0 32px; height:68px; }
-      .brand { font-size:1.25rem; }
-      .links a { font-size:0.85rem; padding:10px 20px; }
-      .hero { padding:100px 24px 80px; }
-      .logo-wrap img { width:300px; height:300px; }
-      .play-bar { flex-direction:row; justify-content:space-between; padding:36px 48px; }
-      .play-left { flex-direction:row; text-align:left; gap:28px; }
-      .play-btn { width:84px; height:84px; }
-      .play-btn svg { width:34px; height:34px; }
-      .play-title { font-size:1.7rem; }
-      .coming-soon { font-size:0.9rem; padding:14px 24px; }
-      section { padding:100px 24px; }
-      .sec-title { font-size:2.2rem; letter-spacing:4px; }
-      .sec-sub { font-size:1.05rem; margin-bottom:56px; }
-      .cards { grid-template-columns:repeat(2,1fr); gap:24px; }
-      .card { padding:36px 28px; }
-      .dl-grid { flex-direction:row; gap:40px; }
-      .dl-card { width:auto; max-width:320px; padding:36px 48px; }
-      .dl-icon { width:64px; height:64px; }
-      .dl-btn { width:auto; }
-      .dev-card { padding:56px 48px; max-width:560px; }
-      .dev-card img { width:120px; height:120px; }
-    }
-    @media(min-width:1024px){
-      .cards { grid-template-columns:repeat(4,1fr); }
-    }
     /* LIKE BUTTON */
-    .like-section { display:flex; flex-direction:column; align-items:center; }
+    .like-section { display:flex; flex-direction:column; align-items:center; gap:12px; }
     .like-btn {
       display:flex; align-items:center; gap:10px;
       padding:12px 28px;
@@ -481,9 +453,42 @@
       50% { transform:scale(1.15); }
       100% { transform:scale(1); }
     }
-    .like-names { transition:all 0.4s ease; }
-    .like-names.show { display:block !important; animation:fadeIn 0.5s ease; }
-    @keyframes fadeIn { from { opacity:0; transform:translateY(-5px); } to { opacity:1; transform:translateY(0); } }
+    .like-users {
+      color:var(--gray);
+      font-size:0.8rem;
+      letter-spacing:1px;
+      min-height:20px;
+    }
+    .like-users span { color:var(--red); font-weight:700; }
+
+    /* DESKTOP */
+    @media(min-width:769px){
+      nav { padding:0 32px; height:68px; }
+      .brand { font-size:1.25rem; }
+      .links a { font-size:0.85rem; padding:10px 20px; }
+      .hero { padding:100px 24px 80px; }
+      .logo-wrap img { width:300px; height:300px; }
+      .play-bar { flex-direction:row; justify-content:space-between; padding:36px 48px; }
+      .play-left { flex-direction:row; text-align:left; gap:28px; }
+      .play-btn { width:84px; height:84px; }
+      .play-btn svg { width:34px; height:34px; }
+      .play-title { font-size:1.7rem; }
+      .coming-soon { font-size:0.9rem; padding:14px 24px; }
+      section { padding:100px 24px; }
+      .sec-title { font-size:2.2rem; letter-spacing:4px; }
+      .sec-sub { font-size:1.05rem; margin-bottom:56px; }
+      .cards { grid-template-columns:repeat(2,1fr); gap:24px; }
+      .card { padding:36px 28px; }
+      .dl-grid { flex-direction:row; gap:40px; }
+      .dl-card { width:auto; max-width:320px; padding:36px 48px; }
+      .dl-icon { width:64px; height:64px; }
+      .dl-btn { width:auto; }
+      .dev-card { padding:56px 48px; max-width:560px; }
+      .dev-card img { width:120px; height:120px; }
+    }
+    @media(min-width:1024px){
+      .cards { grid-template-columns:repeat(4,1fr); }
+    }
   </style>
 </head>
 <body>
@@ -566,11 +571,26 @@
     <!-- Android -->
     <div class="dl-card and d2">
       <div class="dl-icon">
-        <svg viewBox="0 0 105 125" fill="none"><path d="M78.5 0L65.8 21.8H39.2L26.5 0H78.5Z" fill="#3DDC84"/><path d="M52.5 95C41.2 95 32 85.8 32 74.5V35.5C32 24.2 41.2 15 52.5 15C63.8 15 73 24.2 73 35.5V74.5C73 85.8 63.8 95 52.5 95Z" fill="#3DDC84"/><path d="M20 35C14.5 35 10 39.5 10 45V70C10 75.5 14.5 80 20 80C25.5 80 30 75.5 30 70V45C30 39.5 25.5 35 20 35Z" fill="#3DDC84"/><path d="M85 35C79.5 35 75 39.5 75 45V70C75 75.5 79.5 80 85 80C90.5 80 95 75.5 95 70V45C95 39.5 90.5 35 85 35Z" fill="#3DDC84"/><path d="M32 95H73V105C73 110.5 68.5 115 63 115H42C36.5 115 32 110.5 32 105V95Z" fill="#3DDC84"/><path d="M15 25C12.2 25 10 27.2 10 30V55C10 57.8 12.2 60 15 60C17.8 60 20 57.8 20 55V30C20 27.2 17.8 25 15 25Z" fill="#3DDC84"/><path d="M90 25C87.2 25 85 27.2 85 30V55C85 57.8 87.2 60 90 60C92.8 60 95 57.8 95 55V30C95 27.2 92.8 25 90 25Z" fill="#3DDC84"/></svg>
+        <!-- Official Android robot logo -->
+        <svg viewBox="0 0 96 105" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18.7 34.2c-4.4 0-8 3.6-8 8v24c0 4.4 3.6 8 8 8s8-3.6 8-8v-24c0-4.4-3.6-8-8-8z" fill="#3DDC84"/>
+          <path d="M77.3 34.2c-4.4 0-8 3.6-8 8v24c0 4.4 3.6 8 8 8s8-3.6 8-8v-24c0-4.4-3.6-8-8-8z" fill="#3DDC84"/>
+          <path d="M48 7.5c-15.5 0-28 12.5-28 28v40c0 4.4 3.6 8 8 8h40c4.4 0 8-3.6 8-8v-40c0-15.5-12.5-28-28-28z" fill="#3DDC84"/>
+          <path d="M28.5 12.5l-8-13.8c-.5-.9-1.6-1.2-2.5-.7-.9.5-1.2 1.6-.7 2.5l8 13.8c.5.9 1.6 1.2 2.5.7.9-.5 1.2-1.6.7-2.5z" fill="#3DDC84"/>
+          <path d="M67.5 12.5l8-13.8c.5-.9.2-2-1.2-2.5-.9-.5-2-.2-2.5.7l-8 13.8c-.5.9-.2 2 .7 2.5.9.5 2 .2 2.5-.7z" fill="#3DDC84"/>
+          <path d="M36 83.5v12c0 4.4 3.6 8 8 8h8c4.4 0 8-3.6 8-8v-12H36z" fill="#3DDC84"/>
+        </svg>
       </div>
       <div class="dl-name">Android</div>
       <button class="dl-btn and-btn">
-        <svg width="16" height="16" viewBox="0 0 105 125" fill="currentColor"><path d="M78.5 0L65.8 21.8H39.2L26.5 0H78.5Z"/><path d="M52.5 95C41.2 95 32 85.8 32 74.5V35.5C32 24.2 41.2 15 52.5 15C63.8 15 73 24.2 73 35.5V74.5C73 85.8 63.8 95 52.5 95Z"/><path d="M20 35C14.5 35 10 39.5 10 45V70C10 75.5 14.5 80 20 80C25.5 80 30 75.5 30 70V45C30 39.5 25.5 35 20 35Z"/><path d="M85 35C79.5 35 75 39.5 75 45V70C75 75.5 79.5 80 85 80C90.5 80 95 75.5 95 70V45C95 39.5 90.5 35 85 35Z"/><path d="M32 95H73V105C73 110.5 68.5 115 63 115H42C36.5 115 32 110.5 32 105V95Z"/><path d="M15 25C12.2 25 10 27.2 10 30V55C10 57.8 12.2 60 15 60C17.8 60 20 57.8 20 55V30C20 27.2 17.8 25 15 25Z"/><path d="M90 25C87.2 25 85 27.2 85 30V55C85 57.8 87.2 60 90 60C92.8 60 95 57.8 95 55V30C95 27.2 92.8 25 90 25Z"/></svg>
+        <svg width="16" height="16" viewBox="0 0 96 105" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18.7 34.2c-4.4 0-8 3.6-8 8v24c0 4.4 3.6 8 8 8s8-3.6 8-8v-24c0-4.4-3.6-8-8-8z"/>
+          <path d="M77.3 34.2c-4.4 0-8 3.6-8 8v24c0 4.4 3.6 8 8 8s8-3.6 8-8v-24c0-4.4-3.6-8-8-8z"/>
+          <path d="M48 7.5c-15.5 0-28 12.5-28 28v40c0 4.4 3.6 8 8 8h40c4.4 0 8-3.6 8-8v-40c0-15.5-12.5-28-28-28z"/>
+          <path d="M28.5 12.5l-8-13.8c-.5-.9-1.6-1.2-2.5-.7-.9.5-1.2 1.6-.7 2.5l8 13.8c.5.9 1.6 1.2 2.5.7.9-.5 1.2-1.6.7-2.5z"/>
+          <path d="M67.5 12.5l8-13.8c.5-.9.2-2-1.2-2.5-.9-.5-2-.2-2.5.7l-8 13.8c-.5.9-.2 2 .7 2.5.9.5 2 .2 2.5-.7z"/>
+          <path d="M36 83.5v12c0 4.4 3.6 8 8 8h8c4.4 0 8-3.6 8-8v-12H36z"/>
+        </svg>
         Download
       </button>
       <div class="dl-soon">Coming Soon</div>
@@ -595,7 +615,7 @@
         <span class="like-text">Like</span>
         <span class="like-count" id="likeCount">0</span>
       </button>
-
+      <div class="like-users" id="likeUsers">Loading likes...</div>
     </div>
 
     <div class="dev-line"></div>
@@ -611,14 +631,114 @@
 </footer>
 
 <script>
-  // Scroll reveal
+  // ===== CountAPI Like System (Shared Counter) =====
+  const NAMESPACE = 'shadow-arena-ab-legacy';
+  const KEY = 'likes';
+  let currentLikes = 0;
+  let userLiked = false;
+
+  // Check if user already liked (stored locally)
+  function getUserLiked() {
+    return localStorage.getItem('ab_legacy_liked') === 'true';
+  }
+
+  function setUserLiked(val) {
+    localStorage.setItem('ab_legacy_liked', val ? 'true' : 'false');
+  }
+
+  // Fetch current likes from CountAPI
+  async function fetchLikes() {
+    try {
+      const res = await fetch(`https://api.countapi.xyz/get/${NAMESPACE}/${KEY}`);
+      const data = await res.json();
+      currentLikes = data.value || 0;
+      updateUI();
+    } catch (e) {
+      console.error('Failed to fetch likes:', e);
+      document.getElementById('likeUsers').textContent = 'Unable to load likes';
+    }
+  }
+
+  // Hit (increment) likes
+  async function hitLike() {
+    try {
+      const res = await fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/${KEY}`);
+      const data = await res.json();
+      currentLikes = data.value;
+      setUserLiked(true);
+      updateUI();
+    } catch (e) {
+      console.error('Failed to like:', e);
+    }
+  }
+
+  // Set (decrement) likes - for unlike
+  async function unlike() {
+    try {
+      const newVal = Math.max(0, currentLikes - 1);
+      const res = await fetch(`https://api.countapi.xyz/set/${NAMESPACE}/${KEY}?value=${newVal}`);
+      const data = await res.json();
+      currentLikes = data.value;
+      setUserLiked(false);
+      updateUI();
+    } catch (e) {
+      console.error('Failed to unlike:', e);
+    }
+  }
+
+  // Update button and counter UI
+  function updateUI() {
+    const btn = document.getElementById('likeBtn');
+    const count = document.getElementById('likeCount');
+    const text = btn.querySelector('.like-text');
+    const usersText = document.getElementById('likeUsers');
+
+    count.textContent = currentLikes;
+
+    if (getUserLiked()) {
+      btn.classList.add('liked');
+      text.textContent = 'Liked';
+    } else {
+      btn.classList.remove('liked');
+      text.textContent = 'Like';
+    }
+
+    if (currentLikes === 0) {
+      usersText.textContent = 'Be the first to like!';
+    } else if (currentLikes === 1) {
+      usersText.innerHTML = '<span>1</span> person likes this';
+    } else {
+      usersText.innerHTML = '<span>' + currentLikes + '</span> people like this';
+    }
+  }
+
+  // Toggle like/unlike
+  async function toggleLike() {
+    const btn = document.getElementById('likeBtn');
+    btn.disabled = true;
+    btn.style.opacity = '0.6';
+
+    if (getUserLiked()) {
+      await unlike();
+    } else {
+      await hitLike();
+    }
+
+    btn.disabled = false;
+    btn.style.opacity = '1';
+  }
+
+  // Init likes on page load
+  fetchLikes();
+
+  // ===== Scroll reveal =====
   document.querySelectorAll('.reveal').forEach(el => {
     new IntersectionObserver((entries) => {
       entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
     },{threshold:0.1}).observe(el);
   });
 
-  // Smooth scroll + active nav
+  // ===== Smooth scroll + active nav =====
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click',function(e){
       e.preventDefault();
@@ -634,27 +754,6 @@
       l.classList.toggle('active',l.getAttribute('href')==='#'+cur);
     });
   });
-
-  // Like button functionality
-  let liked = false;
-  let likeCount = 0;
-  function toggleLike() {
-    const btn = document.getElementById('likeBtn');
-    const count = document.getElementById('likeCount');
-    if (!liked) {
-      liked = true;
-      likeCount++;
-      btn.classList.add('liked');
-      btn.querySelector('.like-text').textContent = 'Liked';
-      count.textContent = likeCount;
-    } else {
-      liked = false;
-      likeCount--;
-      btn.classList.remove('liked');
-      btn.querySelector('.like-text').textContent = 'Like';
-      count.textContent = likeCount;
-    }
-  }
 </script>
 
 </body>
