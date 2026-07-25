@@ -439,27 +439,11 @@
     }
     .heart-icon { width:20px; height:20px; transition:all 0.3s ease; }
     .like-btn.liked .heart-icon { fill:#3ddc84; stroke:#3ddc84; transform:scale(1.2); }
-    .like-count {
-      background:rgba(255,255,255,0.1);
-      padding:2px 10px;
-      border-radius:12px;
-      font-size:0.75rem;
-      min-width:24px;
-      text-align:center;
-    }
-    .like-btn.liked .like-count { background:rgba(61,220,132,0.2); }
     @keyframes likePulse {
       0% { transform:scale(1); }
       50% { transform:scale(1.15); }
       100% { transform:scale(1); }
     }
-    .like-users {
-      color:var(--gray);
-      font-size:0.8rem;
-      letter-spacing:1px;
-      min-height:20px;
-    }
-    .like-users span { color:var(--red); font-weight:700; }
 
     /* DESKTOP */
     @media(min-width:769px){
@@ -571,7 +555,6 @@
     <!-- Android -->
     <div class="dl-card and d2">
       <div class="dl-icon">
-        <!-- Official Android robot logo -->
         <svg viewBox="0 0 96 105" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M18.7 34.2c-4.4 0-8 3.6-8 8v24c0 4.4 3.6 8 8 8s8-3.6 8-8v-24c0-4.4-3.6-8-8-8z" fill="#3DDC84"/>
           <path d="M77.3 34.2c-4.4 0-8 3.6-8 8v24c0 4.4 3.6 8 8 8s8-3.6 8-8v-24c0-4.4-3.6-8-8-8z" fill="#3DDC84"/>
@@ -613,9 +596,7 @@
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
         </svg>
         <span class="like-text">Like</span>
-        <span class="like-count" id="likeCount">0</span>
       </button>
-      <div class="like-users" id="likeUsers">Loading likes...</div>
     </div>
 
     <div class="dev-line"></div>
@@ -631,105 +612,37 @@
 </footer>
 
 <script>
-  // ===== CountAPI Like System (Shared Counter) =====
-  const NAMESPACE = 'shadow-arena-ab-legacy';
-  const KEY = 'likes';
-  let currentLikes = 0;
-  let userLiked = false;
+  // ===== Simple Local Like Toggle =====
+  const STORAGE_KEY = 'ab_legacy_liked';
 
-  // Check if user already liked (stored locally)
-  function getUserLiked() {
-    return localStorage.getItem('ab_legacy_liked') === 'true';
+  function isLiked() {
+    return localStorage.getItem(STORAGE_KEY) === 'true';
   }
 
-  function setUserLiked(val) {
-    localStorage.setItem('ab_legacy_liked', val ? 'true' : 'false');
+  function setLiked(val) {
+    localStorage.setItem(STORAGE_KEY, val ? 'true' : 'false');
   }
 
-  // Fetch current likes from CountAPI
-  async function fetchLikes() {
-    try {
-      const res = await fetch(`https://api.countapi.xyz/get/${NAMESPACE}/${KEY}`);
-      const data = await res.json();
-      currentLikes = data.value || 0;
-      updateUI();
-    } catch (e) {
-      console.error('Failed to fetch likes:', e);
-      document.getElementById('likeUsers').textContent = 'Unable to load likes';
-    }
-  }
-
-  // Hit (increment) likes
-  async function hitLike() {
-    try {
-      const res = await fetch(`https://api.countapi.xyz/hit/${NAMESPACE}/${KEY}`);
-      const data = await res.json();
-      currentLikes = data.value;
-      setUserLiked(true);
-      updateUI();
-    } catch (e) {
-      console.error('Failed to like:', e);
-    }
-  }
-
-  // Set (decrement) likes - for unlike
-  async function unlike() {
-    try {
-      const newVal = Math.max(0, currentLikes - 1);
-      const res = await fetch(`https://api.countapi.xyz/set/${NAMESPACE}/${KEY}?value=${newVal}`);
-      const data = await res.json();
-      currentLikes = data.value;
-      setUserLiked(false);
-      updateUI();
-    } catch (e) {
-      console.error('Failed to unlike:', e);
-    }
-  }
-
-  // Update button and counter UI
-  function updateUI() {
+  function updateLikeUI() {
     const btn = document.getElementById('likeBtn');
-    const count = document.getElementById('likeCount');
     const text = btn.querySelector('.like-text');
-    const usersText = document.getElementById('likeUsers');
 
-    count.textContent = currentLikes;
-
-    if (getUserLiked()) {
+    if (isLiked()) {
       btn.classList.add('liked');
       text.textContent = 'Liked';
     } else {
       btn.classList.remove('liked');
       text.textContent = 'Like';
     }
-
-    if (currentLikes === 0) {
-      usersText.textContent = 'Be the first to like!';
-    } else if (currentLikes === 1) {
-      usersText.innerHTML = '<span>1</span> person likes this';
-    } else {
-      usersText.innerHTML = '<span>' + currentLikes + '</span> people like this';
-    }
   }
 
-  // Toggle like/unlike
-  async function toggleLike() {
-    const btn = document.getElementById('likeBtn');
-    btn.disabled = true;
-    btn.style.opacity = '0.6';
-
-    if (getUserLiked()) {
-      await unlike();
-    } else {
-      await hitLike();
-    }
-
-    btn.disabled = false;
-    btn.style.opacity = '1';
+  function toggleLike() {
+    setLiked(!isLiked());
+    updateLikeUI();
   }
 
-  // Init likes on page load
-  fetchLikes();
+  // Init on load
+  updateLikeUI();
 
   // ===== Scroll reveal =====
   document.querySelectorAll('.reveal').forEach(el => {
